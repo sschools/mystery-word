@@ -21,3 +21,15 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
+
+app.get("/", function(request, respond) {
+  respond.redirect("/home");
+});
+
+app.get("/home", function(request, respond) {
+  respond.render("home");
+});
+
+app.listen(3000, function () {
+  console.log("Mystery Word Running on 3000");
+});
