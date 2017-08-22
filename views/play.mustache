@@ -12,7 +12,7 @@
       <h3>Enter Your Letter Guess Below</h3>
     </header>
     <main>
-      <h1 id="word">{{player.word}}</h1>
+      <br>
       <h1 id="hidden-word">{{player.hiddenWord}}</h1>
       <form action="/play" method="POST">
         <label for="letter">Guess A Letter: </label>
@@ -25,6 +25,7 @@
         <span>{{.}} </span>
         {{/player.letters}}
       </h2>
+      <h1>{{message}}</h1>
     </main>
   </body>
 </html>

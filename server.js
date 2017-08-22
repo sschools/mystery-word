@@ -60,24 +60,33 @@ app.get("/play", function(request, respond) {
 });
 
 app.post("/play", function(request, respond) {
-  let letter = request.body.letter;
-  console.log(request.session);
-  let match = false;
-  request.session.player.letters.push(letter);
-  for (let i = 0; i < request.session.player.wordArray.length; i++) {
-    if (request.session.player.wordArray[i] === letter) {
-      request.session.player.hiddenArray[i] = letter;
-      match = true;
+  let test = request.body.letter.length;
+  if (test > 1 || request.body.letter < "a" || request.body.letter > "z") {
+    respond.render("play", {player: request.session.player, message: "Must enter 1 letter."})
+  } else {
+    let letter = request.body.letter;
+    let match = false;
+    request.session.player.letters.push(letter);
+    for (let i = 0; i < request.session.player.wordArray.length; i++) {
+      if (request.session.player.wordArray[i] === letter) {
+        request.session.player.hiddenArray[i] = letter;
+        match = true;
+      }
     }
+    if (!match) {
+      request.session.player.numGuesses -= 1;
+    }
+    request.session.player.hiddenWord = "";
+    for (let i = 0; i < request.session.player.hiddenArray.length; i++) {
+      request.session.player.hiddenWord += request.session.player.hiddenArray[i] + " ";
+    }
+    if (request.session.player.wordArray === request.session.player.hiddenArray) {
+      respond.render("play", {player: request.session.player, message:"You WIN!!"});
+    } else if (request.session.player.numGuesses === 0) {
+      respond.render("play", {player: request.session.player, message:"You Lose"});
+    }
+    respond.redirect("/play");
   }
-  if (!match) {
-    request.session.player.numGuesses -= 1;
-  }
-  request.session.player.hiddenWord = "";
-  for (let i = 0; i < request.session.player.hiddenArray.length; i++) {
-    request.session.player.hiddenWord += request.session.player.hiddenArray[i] + " ";
-  }
-  respond.redirect("/play");
 });
 
 app.listen(3000, function () {
