@@ -43,9 +43,15 @@ app.get("/play", function(request, respond) {
   let x = Math.floor(Math.random()*words.length);
   let word = words[x];
   let hiddenWord = "";
+  let wordArray = [];
+  let hiddenArray = [];
   request.session.player.word = word;
   for (let i = 0; i < word.length; i++) {
-    hiddenWord += "_";
+    wordArray[i] = word.slice(i, 1);
+    hiddenArray[i] = "_";
+  }
+  for (let i = 0; i < hiddenArray.length; i++) {
+    hiddenWord += hiddenArray[i] + " ";
   }
   request.session.player.hiddenWord = hiddenWord;
   console.log("Word length", word.length);
