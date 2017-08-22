@@ -17,3 +17,9 @@ input {
   color: #0000ff;
   border: 1px solid #0000ff;
 }
+
+#hidden-word {
+  text-transform: capitalize;
+  font-size: 50px;
+  
+}
