@@ -14,11 +14,13 @@
     <main>
       <br>
       <h1 id="hidden-word">{{player.hiddenWord}}</h1>
+      {{^player.end}}
       <form action="/play" method="POST">
         <label for="letter">Guess A Letter: </label>
         <input name="letter" type="text"/>
         <button type="submit" name="guess-button">Guess!</button>
       </form>
+      {{/player.end}}
       <h2>You have {{player.numGuesses}} attempts left.</h2>
       <h2>Letter Guessed So Far:
         {{#player.letters}}

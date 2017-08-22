@@ -34,7 +34,7 @@ app.get("/home", function(request, respond) {
 });
 
 app.post("/home", function(request, respond) {
-  let player = {name: request.body.name, numGuesses: 8, letters: []};
+  let player = {name: request.body.name, numGuesses: 8, letters: [], end: false};
   request.session.player = player;
   let x = Math.floor(Math.random()*words.length);
   let word = words[x];
@@ -81,8 +81,10 @@ app.post("/play", function(request, respond) {
       request.session.player.hiddenWord += request.session.player.hiddenArray[i] + " ";
     }
     if (request.session.player.wordArray === request.session.player.hiddenArray) {
+      request.session.player.end = true;
       respond.render("play", {player: request.session.player, message:"You WIN!!"});
     } else if (request.session.player.numGuesses === 0) {
+      request.session.player.end = true;
       respond.render("play", {player: request.session.player, message:"You Lose"});
     }
     respond.redirect("/play");
