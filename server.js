@@ -62,9 +62,14 @@ app.get("/play", function(request, respond) {
 app.post("/play", function(request, respond) {
   let test = request.body.letter.length;
   if (test > 1 || request.body.letter < "a" || request.body.letter > "z") {
-    respond.render("play", {player: request.session.player, message: "Must enter 1 letter."})
+    respond.render("play", {player: request.session.player, message: "Must enter 1 letter."});
   } else {
     let letter = request.body.letter;
+    for (let i = 0; i < request.session.player.letters.length; i++) {
+      if (letter === request.session.player.letters[i]) {
+        respond.render("play", {player: request.session.player, message: "You have already guessed " + letter + " try again."});
+      }
+    }
     let match = false;
     request.session.player.letters.push(letter);
     for (let i = 0; i < request.session.player.wordArray.length; i++) {
@@ -80,6 +85,8 @@ app.post("/play", function(request, respond) {
     for (let i = 0; i < request.session.player.hiddenArray.length; i++) {
       request.session.player.hiddenWord += request.session.player.hiddenArray[i] + " ";
     }
+    console.log(request.session.player.wordArray);
+    console.log(request.session.player.hiddenArray);
     if (request.session.player.wordArray === request.session.player.hiddenArray) {
       request.session.player.end = true;
       respond.render("play", {player: request.session.player, message:"You WIN!!"});
