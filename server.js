@@ -36,10 +36,6 @@ app.get("/home", function(request, respond) {
 app.post("/home", function(request, respond) {
   let player = {name: request.body.name, numGuesses: 8, letters: []};
   request.session.player = player;
-  respond.redirect("/play");
-});
-
-app.get("/play", function(request, respond) {
   let x = Math.floor(Math.random()*words.length);
   let word = words[x];
   let hiddenWord = "";
@@ -47,16 +43,41 @@ app.get("/play", function(request, respond) {
   let hiddenArray = [];
   request.session.player.word = word;
   for (let i = 0; i < word.length; i++) {
-    wordArray[i] = word.slice(i, 1);
+    wordArray[i] = word.slice(i, i+1);
     hiddenArray[i] = "_";
   }
   for (let i = 0; i < hiddenArray.length; i++) {
     hiddenWord += hiddenArray[i] + " ";
   }
   request.session.player.hiddenWord = hiddenWord;
-  console.log("Word length", word.length);
-  console.log("Hidden word length", hiddenWord.length);
+  request.session.player.wordArray = wordArray;
+  request.session.player.hiddenArray = hiddenArray;
+  respond.redirect("/play");
+});
+
+app.get("/play", function(request, respond) {
   respond.render("play", {player: request.session.player});
+});
+
+app.post("/play", function(request, respond) {
+  let letter = request.body.letter;
+  console.log(request.session);
+  let match = false;
+  request.session.player.letters.push(letter);
+  for (let i = 0; i < request.session.player.wordArray.length; i++) {
+    if (request.session.player.wordArray[i] === letter) {
+      request.session.player.hiddenArray[i] = letter;
+      match = true;
+    }
+  }
+  if (!match) {
+    request.session.player.numGuesses -= 1;
+  }
+  request.session.player.hiddenWord = "";
+  for (let i = 0; i < request.session.player.hiddenArray.length; i++) {
+    request.session.player.hiddenWord += request.session.player.hiddenArray[i] + " ";
+  }
+  respond.redirect("/play");
 });
 
 app.listen(3000, function () {
