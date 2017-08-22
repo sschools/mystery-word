@@ -3,13 +3,17 @@
   <head>
     <title>Mystery Word Login</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
   </head>
-  <body>
+  <body class="home-body">
     <header id="header">
+      <h1>Welcome to the Mystery Word Game</h1>
     </header>
     <main>
-
+      <form action="/home" method="POST">
+        <input type="text" name="name" placeholder="Enter your first name to begin"/>
+        <button type="submit" name="start-button">Let's Play</button>
+      </form>
     </main>
   </body>
 </html>

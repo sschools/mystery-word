@@ -30,6 +30,16 @@ app.get("/home", function(request, respond) {
   respond.render("home");
 });
 
+app.post("/home", function(request, respond) {
+  let player = {name: request.body.name, numGuesses: 8, letters: []};
+  request.session.player = player;
+  respond.redirect("/play");
+});
+
+app.get("/play", function(request, respond) {
+  respond.render("play", {player: request.session.player});
+});
+
 app.listen(3000, function () {
   console.log("Mystery Word Running on 3000");
 });
