@@ -39,17 +39,10 @@ app.post("/home", function(request, respond) {
   request.session.player = player;
   let x = Math.floor(Math.random()*words.length);
   let word = words[x];
-  let hiddenWord = "";
-  let wordArray = [];
-  let hiddenArray = [];
+  let wordArray = gameDal.createWordArray(word);
+  let hiddenArray = gameDal.createHiddenArray(word);
+  let hiddenWord = gameDal.createHiddenWord(hiddenArray);
   request.session.player.word = word;
-  for (let i = 0; i < word.length; i++) {
-    wordArray[i] = word.slice(i, i+1);
-    hiddenArray[i] = "_";
-  }
-  for (let i = 0; i < hiddenArray.length; i++) {
-    hiddenWord += hiddenArray[i] + " ";
-  }
   request.session.player.hiddenWord = hiddenWord;
   request.session.player.wordArray = wordArray;
   request.session.player.hiddenArray = hiddenArray;
@@ -61,11 +54,10 @@ app.get("/play", function(request, respond) {
 });
 
 app.post("/play", function(request, respond) {
-  let test = request.body.letter.length;
-  if (test > 1 || request.body.letter < "a" || request.body.letter > "z") {
+  let letter = request.body.letter;
+  if (gameDal.testLetterInput(letter)) {
     respond.render("play", {player: request.session.player, message: "Must enter 1 letter."});
   } else {
-    let letter = request.body.letter;
     for (let i = 0; i < request.session.player.letters.length; i++) {
       if (letter === request.session.player.letters[i]) {
         respond.render("play", {player: request.session.player, message: "You have already guessed " + letter + " try again."});
@@ -86,8 +78,6 @@ app.post("/play", function(request, respond) {
     for (let i = 0; i < request.session.player.hiddenArray.length; i++) {
       request.session.player.hiddenWord += request.session.player.hiddenArray[i] + " ";
     }
-    console.log(request.session.player.wordArray);
-    console.log(request.session.player.hiddenArray);
     if (gameDal.checkWin(request.session.player.wordArray, request.session.player.hiddenArray)) {
       request.session.player.end = true;
       respond.redirect("/win");
