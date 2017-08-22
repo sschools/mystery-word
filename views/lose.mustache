@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mystery Word You Lose</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body class="lose-body">
+    <header id="header">
+      <h1>You Lost!</h1>
+    </header>
+    <main>
+      <h2>The Word Was: {{player.word}}</h2>
+      <form action="/lose" method="POST">
+        <button type="submit" name="restart">Restart</button>
+      </form>
+    </main>
+  </body>
+</html>

@@ -24,6 +24,7 @@ app.use(session({
 }));
 
 const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
+const gameDal = require("./dal");
 
 app.get("/", function(request, respond) {
   respond.redirect("/home");
@@ -87,15 +88,33 @@ app.post("/play", function(request, respond) {
     }
     console.log(request.session.player.wordArray);
     console.log(request.session.player.hiddenArray);
-    if (request.session.player.wordArray === request.session.player.hiddenArray) {
+    if (gameDal.checkWin(request.session.player.wordArray, request.session.player.hiddenArray)) {
       request.session.player.end = true;
-      respond.render("play", {player: request.session.player, message:"You WIN!!"});
+      respond.redirect("/win");
     } else if (request.session.player.numGuesses === 0) {
       request.session.player.end = true;
-      respond.render("play", {player: request.session.player, message:"You Lose"});
+      respond.redirect("/lose");
     }
     respond.redirect("/play");
   }
+});
+
+app.get("/win", function(request, respond) {
+  respond.render("win", {player: request.session.player});
+});
+
+app.get("/lose", function(request, respond) {
+  respond.render("lose", {player: request.session.player});
+});
+
+app.post("/win", function(request, respond) {
+  request.session.destroy();
+  respond.redirect("/home");
+});
+
+app.post("/lose", function(request, respond) {
+  request.session.destroy();
+  respond.redirect("home");
 });
 
 app.listen(3000, function () {
