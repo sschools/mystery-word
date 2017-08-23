@@ -1,3 +1,8 @@
+body {
+  background-color: #eff5ff;
+  font-family: sans-serif;
+}
+
 .home-body input {
   width: 200px;
   height: 30px;
@@ -21,10 +26,30 @@ button:hover {
 #hidden-word {
   text-transform: capitalize;
   font-size: 50px;
-
 }
 
 .play-body input {
   width: 30px;
   height: 30px;
+}
+
+span {
+  text-transform: capitalize;
+  color: #ff0000;
+}
+
+select {
+  margin: 10px;
+  height: 30px;
+}
+
+#hidden-word {
+  width: min-content;
+  display: inline;
+  padding: 10px;
+  border: 5px solid #4286f4;
+}
+
+.play-body form {
+  margin: 50px 0;
 }

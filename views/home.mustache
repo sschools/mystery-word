@@ -11,6 +11,14 @@
     </header>
     <main>
       <form action="/home" method="POST">
+        <label for="level">Select Difficulty Level:</label>
+        <br>
+        <select name="level">
+          <option value="easy">Easy mode - Short Words</option>
+          <option value="normal" selected>Normal mode - Medium Words</option>
+          <option value="hard">Hard mode - Long Words</option>
+        </select>
+        <br>
         <input type="text" name="name" placeholder="Enter your first name to begin"/>
         <button type="submit" name="start-button">Let's Play</button>
       </form>

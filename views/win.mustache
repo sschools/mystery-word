@@ -10,7 +10,7 @@
       <h1>You Win!!!!</h1>
     </header>
     <main>
-      <h2>The Word Was: {{player.word}}</h2>
+      <h2>The Word Was: <span>{{player.word}}</span></h2>
       <form action="/win" method="POST">
         <button type="submit" name="restart">Restart</button>
       </form>

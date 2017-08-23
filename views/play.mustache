@@ -21,8 +21,8 @@
         <button type="submit" name="guess-button">Guess!</button>
       </form>
       {{/player.end}}
-      <h2>You have {{player.numGuesses}} attempts left.</h2>
-      <h2>Letter Guessed So Far:
+      <h2>You have <span>{{player.numGuesses}}</span> attempts left.</h2>
+      <h2>Letters Guessed So Far:
         {{#player.letters}}
         <span>{{.}} </span>
         {{/player.letters}}

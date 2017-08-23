@@ -33,7 +33,7 @@ app.get("/home", function(request, respond) {
 });
 
 app.post("/home", function(request, respond) {
-  let player = {name: request.body.name, numGuesses: 8, letters: [], end: false};
+  let player = {name: request.body.name, level: request.body.level, numGuesses: 8, letters: [], end: false};
   player = gameDal.setUpPlayer(player);
   request.session.player = player;
   respond.redirect("/play");

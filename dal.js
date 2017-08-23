@@ -36,8 +36,22 @@ function createHiddenWord(arr) {
 }
 
 function setUpPlayer(player) {
+  let min = 2;
+  let max = 24;
+  if (player.level === "easy") {
+    max = 5;
+  } else if (player.level === "normal") {
+    min = 6;
+    max = 8;
+  } else {
+    min = 8;
+  }
   let x = Math.floor(Math.random()*words.length);
   let word = words[x];
+  while (word.length < min || word.length > max) {
+    x = Math.floor(Math.random()*words.length);
+    word = words[x];
+  }
   let wordArray = createWordArray(word);
   let hiddenArray = createHiddenArray(word);
   let hiddenWord = createHiddenWord(hiddenArray);
