@@ -36,10 +36,21 @@ function testLetterInput(letter) {
   return (letter.length > 1 || letter < "a" || letter > "z");
 }
 
+function testForRepeat(letter, player) {
+  let repeat = false;
+  for (let i = 0; i < player.letters.length; i++) {
+    if (letter === player.letters[i]) {
+      repeat = true;
+    }
+  }
+  return repeat;
+}
+
 module.exports ={
   checkWin: checkWin,
   createWordArray: createWordArray,
   createHiddenArray: createHiddenArray,
   createHiddenWord: createHiddenWord,
-  testLetterInput: testLetterInput
+  testLetterInput: testLetterInput,
+  testForRepeat: testForRepeat
 }

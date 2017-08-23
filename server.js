@@ -55,16 +55,14 @@ app.get("/play", function(request, respond) {
 
 app.post("/play", function(request, respond) {
   let letter = request.body.letter;
+  let player = request.session.player;
   if (gameDal.testLetterInput(letter)) {
-    respond.render("play", {player: request.session.player, message: "Must enter 1 letter."});
+    respond.render("play", {player: player, message: "Must enter 1 letter."});
+  } else if (gameDal.testForRepeat(letter, player)) {
+        respond.render("play", {player: player, message: "You have already guessed " + letter + " try again."});
   } else {
-    for (let i = 0; i < request.session.player.letters.length; i++) {
-      if (letter === request.session.player.letters[i]) {
-        respond.render("play", {player: request.session.player, message: "You have already guessed " + letter + " try again."});
-      }
-    }
     let match = false;
-    request.session.player.letters.push(letter);
+    player.letters.push(letter);
     for (let i = 0; i < request.session.player.wordArray.length; i++) {
       if (request.session.player.wordArray[i] === letter) {
         request.session.player.hiddenArray[i] = letter;
