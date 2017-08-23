@@ -36,16 +36,16 @@ app.get("/home", function(request, respond) {
 
 app.post("/home", function(request, respond) {
   let player = {name: request.body.name, numGuesses: 8, letters: [], end: false};
-  request.session.player = player;
   let x = Math.floor(Math.random()*words.length);
   let word = words[x];
   let wordArray = gameDal.createWordArray(word);
   let hiddenArray = gameDal.createHiddenArray(word);
   let hiddenWord = gameDal.createHiddenWord(hiddenArray);
-  request.session.player.word = word;
-  request.session.player.hiddenWord = hiddenWord;
-  request.session.player.wordArray = wordArray;
-  request.session.player.hiddenArray = hiddenArray;
+  player.word = word;
+  player.hiddenWord = hiddenWord;
+  player.wordArray = wordArray;
+  player.hiddenArray = hiddenArray;
+  request.session.player = player;
   respond.redirect("/play");
 });
 
@@ -61,26 +61,12 @@ app.post("/play", function(request, respond) {
   } else if (gameDal.testForRepeat(letter, player)) {
         respond.render("play", {player: player, message: "You have already guessed " + letter + " try again."});
   } else {
-    let match = false;
-    player.letters.push(letter);
-    for (let i = 0; i < request.session.player.wordArray.length; i++) {
-      if (request.session.player.wordArray[i] === letter) {
-        request.session.player.hiddenArray[i] = letter;
-        match = true;
-      }
-    }
-    if (!match) {
-      request.session.player.numGuesses -= 1;
-    }
-    request.session.player.hiddenWord = "";
-    for (let i = 0; i < request.session.player.hiddenArray.length; i++) {
-      request.session.player.hiddenWord += request.session.player.hiddenArray[i] + " ";
-    }
-    if (gameDal.checkWin(request.session.player.wordArray, request.session.player.hiddenArray)) {
-      request.session.player.end = true;
+    player = gameDal.testForMatch(letter, player);
+    if (gameDal.checkWin(player.wordArray, player.hiddenArray)) {
+      player.end = true;
       respond.redirect("/win");
-    } else if (request.session.player.numGuesses === 0) {
-      request.session.player.end = true;
+    } else if (player.numGuesses === 0) {
+      player.end = true;
       respond.redirect("/lose");
     }
     respond.redirect("/play");

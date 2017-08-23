@@ -46,11 +46,28 @@ function testForRepeat(letter, player) {
   return repeat;
 }
 
+function testForMatch(letter, player) {
+  let match = false;
+  player.letters.push(letter);
+  for (let i = 0; i < player.wordArray.length; i++) {
+    if (player.wordArray[i] === letter) {
+      player.hiddenArray[i] = letter;
+      match = true;
+    }
+  }
+  if (!match) {
+    player.numGuesses -= 1;
+  }
+  player.hiddenWord = createHiddenWord(player.hiddenArray);
+  return player;
+}
+
 module.exports ={
   checkWin: checkWin,
   createWordArray: createWordArray,
   createHiddenArray: createHiddenArray,
   createHiddenWord: createHiddenWord,
   testLetterInput: testLetterInput,
-  testForRepeat: testForRepeat
+  testForRepeat: testForRepeat,
+  testForMatch: testForMatch
 }
