@@ -1,3 +1,6 @@
+const fs = require("fs");
+const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
+
 function checkWin(wordArray, hiddenArray) {
   let win = true;
   for (let i = 0; i < wordArray.length; i++) {
@@ -30,6 +33,19 @@ function createHiddenWord(arr) {
     hiddenWord += arr[i] + " ";
   }
   return hiddenWord;
+}
+
+function setUpPlayer(player) {
+  let x = Math.floor(Math.random()*words.length);
+  let word = words[x];
+  let wordArray = createWordArray(word);
+  let hiddenArray = createHiddenArray(word);
+  let hiddenWord = createHiddenWord(hiddenArray);
+  player.word = word;
+  player.hiddenWord = hiddenWord;
+  player.wordArray = wordArray;
+  player.hiddenArray = hiddenArray;
+  return player;
 }
 
 function testLetterInput(letter) {
@@ -69,5 +85,6 @@ module.exports ={
   createHiddenWord: createHiddenWord,
   testLetterInput: testLetterInput,
   testForRepeat: testForRepeat,
-  testForMatch: testForMatch
+  testForMatch: testForMatch,
+  setUpPlayer: setUpPlayer
 }

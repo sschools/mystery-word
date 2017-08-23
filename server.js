@@ -4,7 +4,6 @@ const mustacheExpress = require("mustache-express");
 const parseurl = require("parseurl");
 const bodyParser = require("body-parser");
 const expressValidator = require("express-validator");
-const fs = require("fs");
 
 const app = express();
 
@@ -23,7 +22,6 @@ app.use(session({
   saveUninitialized: true
 }));
 
-const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
 const gameDal = require("./dal");
 
 app.get("/", function(request, respond) {
@@ -36,15 +34,7 @@ app.get("/home", function(request, respond) {
 
 app.post("/home", function(request, respond) {
   let player = {name: request.body.name, numGuesses: 8, letters: [], end: false};
-  let x = Math.floor(Math.random()*words.length);
-  let word = words[x];
-  let wordArray = gameDal.createWordArray(word);
-  let hiddenArray = gameDal.createHiddenArray(word);
-  let hiddenWord = gameDal.createHiddenWord(hiddenArray);
-  player.word = word;
-  player.hiddenWord = hiddenWord;
-  player.wordArray = wordArray;
-  player.hiddenArray = hiddenArray;
+  player = gameDal.setUpPlayer(player);
   request.session.player = player;
   respond.redirect("/play");
 });
